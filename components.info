@@ -1,0 +1,268 @@
+resource-info {
+	kind    components
+	author  "Sam Roth <>"
+}
+
+; 3-terminal logic gates
+
+abstract basic-gate {
+	ports {
+		0 "55 15"
+		1 "0 25"
+		2 "0 5"
+	}
+}
+
+abstract basic-inverse-gate {
+	ports {
+		0 "65 15"
+		1 "0 25"
+		2 "0 5"
+	}
+}
+
+component and-gate {
+	extends  basic-gate
+	svg-file "://resources/components/and.svg"
+}
+
+component or-gate {
+	extends  basic-gate
+	svg-file "://resources/components/or.svg"
+}
+
+component nand-gate {
+	extends basic-inverse-gate
+	svg-file "://resources/components/nand.svg"
+}
+
+component nor-gate {
+	extends basic-inverse-gate
+	svg-file "://resources/components/nor.svg"
+}
+
+component not-gate {
+	svg-file "://resources/components/not.svg"
+	ports {
+		0 "0 10"
+		1 "50 10"
+	}
+}
+
+; generic components
+
+component node {
+	svg-file "://resources/components/node.svg"
+	ports {
+		0 "12.5 12.5"
+	}
+}
+
+component anchor {
+	svg-file "://resources/components/anchor.svg"
+	ports {
+		0 "12.5 12.5"
+	}
+}
+
+component state {
+	svg-file "://resources/components/state.svg"
+	ports {
+		0 "50.0 0.0"
+		1 "100.0 50.0"
+		2 "50.0 100.0"
+		3 "0.0 50.0"
+	}
+}
+
+; basic electrical components
+
+component resistor {
+	svg-file "://resources/components/resistor.svg"
+	ports {
+		0 "0 15"
+		1 "50 15"
+	}
+}
+
+component voltage {
+	svg-file "://resources/components/voltage.svg"
+	ports {
+		0 "15 50"
+		1 "15 0"
+	}
+}
+
+component vcc {
+	svg-file "://resources/components/vcc.svg"
+	ports {
+		0 "15 25"
+	}
+}
+
+component gnd {
+	svg-file "://resources/components/gnd.svg"
+	ports {
+		0 "15 2"
+	}
+}
+
+; transistors
+
+component nmos {
+	svg-file "://resources/components/nmos.svg"
+	ports {
+		0 "0 25"
+		1 "30 25"
+		2 "15 5"
+	}
+}
+
+component pmos {
+	svg-file "://resources/components/pmos.svg"
+	ports {
+		0 "0 25"
+		1 "30 25"
+		2 "15 0"
+	}
+}
+
+; blocks
+
+abstract basic-block {
+	svg-file "://resources/components/block.svg"
+	; rectangle 200x160
+}
+
+component block {
+	extends basic-block
+	ports {
+		; 4-port ports
+		0 "0 55"
+		1 "0 110"
+		2 "200 55"
+		3 "200 110"
+		; 2-port ports
+		4 "0 80"
+		5 "200 80"
+		; top/bottom ports
+		6 "50 0"
+		7 "100 0"
+		8 "150 0"
+		9 "50 160"
+		10 "100 160"
+		11 "150 160"
+	}
+}
+
+component big-block {
+	extends basic-block
+	ports {
+		; top/bottom ports
+		0 "50 0"
+		1 "100 0"
+		2 "150 0"
+		3 "50 160"
+		4 "100 160"
+		5 "150 160"
+		; side ports, left
+		6  "0 15"
+		7  "0 30"
+		8  "0 45"
+		9  "0 60"
+		10 "0 75"
+		11 "0 90"
+		12 "0 105"
+		13 "0 120"
+		14 "0 135"
+		15 "0 150"
+		; side ports, right
+		16 "200 15"
+		17 "200 30"
+		18 "200 45"
+		19 "200 60"
+		20 "200 75"
+		21 "200 90"
+		22 "200 105"
+		23 "200 120"
+		24 "200 135"
+		25 "200 150"
+	}
+}
+
+component dffe {
+	svg-file "://resources/components/dffe.svg"
+	ports {
+		0 "0 30"
+		1 "0 65"
+		2 "0 95"
+		3 "0 130"
+		4 "100 80"
+	}
+}
+
+component dff {
+	svg-file "://resources/components/dff.svg"
+	ports {
+		0 "0 30"
+		1 "0 95"
+		2 "0 130"
+		3 "100 80"
+	}
+}
+; multiplexers
+
+component mux2 {
+	svg-file "://resources/components/mux2.svg"
+	ports {
+		0 "0 80"
+		1 "0 30"
+		2 "40 50"
+		3 "20 90"
+	}
+}
+
+component mux4 {
+	svg-file "://resources/components/mux4.svg"
+	ports {
+		0 "0 120"
+		1 "0 85"
+		2 "0 55"
+		3 "0 20"
+		4 "40 70"
+		5 "20 135"
+	}
+}
+
+component mux8 {
+	svg-file "://resources/components/mux8.svg"
+	ports {
+		0 "0 25"
+		1 "0 60"
+		2 "0 95"
+		3 "0 130"
+		4 "0 170"
+		5 "0 205"
+		6 "0 240"
+		7 "0 275"
+		8 "35 40.0"
+		9 "35 260"
+		10 "70 150"
+	}
+}
+
+; pins
+
+component input-pin {
+	svg-file "://resources/components/input.svg"
+	ports {
+		0 "25 5"
+	}
+}
+
+component output-pin {
+	svg-file "://resources/components/output.svg"
+	ports {
+		0 "0 5"
+	}
+}
