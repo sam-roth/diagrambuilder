@@ -115,7 +115,7 @@ message("system: " ${CMAKE_SYSTEM_NAME})
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 	set(ADDL_LIBS lcms lzma)
 else()
-	set(ADDL_LIBS)
+	set(ADDL_LIBS dl)
 endif()
 
 target_link_libraries(

@@ -9,7 +9,7 @@
 #include "Components/Path/PathItem.hpp"
 #include <QObject>
 #include "DiagramScene.hpp"
-#include "Util.h"
+#include "Util.hpp"
 #include "Util/Log.hpp"
 
 namespace dbuilder {
