@@ -1,4 +1,3 @@
-syntax: glob
 CMakeCache.txt
 CMakeFiles
 cmake_install.cmake
@@ -25,3 +24,5 @@ doc
 *.a
 Prefix.hpp.gch
 *.user.*
+build
+.vscode

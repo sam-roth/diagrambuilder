@@ -121,9 +121,8 @@ inline void terminateHandler()
 	{
 		// we got back here by trying to throw an exception where there wasn't one
 		std::cerr << "terminate() called without an exception" << std::endl;
+		printBacktrace(1, std::cerr);
 	}
-
-	printBacktrace(1, std::cerr);
 
 	raise(SIGKILL); // suppress crash reporter
 }

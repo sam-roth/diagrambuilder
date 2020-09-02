@@ -3,8 +3,7 @@
  * @date   Jul 14, 2013
  * @author Sam Roth <>
  */
-#include <QtCore>
-#include <QtGui>
+#include <QtWidgets/QtWidgets>
 
 #include <algorithm>
 #include <functional>

@@ -11,6 +11,7 @@
 #include <QtCore>
 #include <QMdiArea>
 #include <QAction>
+#include <QtPrintSupport>
 
 #include "Clipboard.hpp"
 #include "Commands/DeleteItemCommand.hpp"
@@ -221,7 +222,7 @@ bool MainWindow::save()
 bool MainWindow::saveAs()
 {
 	QFileDialog d{this};
-	d.setFilter("*.dbuilder");
+	d.setNameFilter("*.dbuilder");
 	d.setWindowModality(Qt::ApplicationModal);
 	d.setAcceptMode(QFileDialog::AcceptSave);
 	if(d.exec())
@@ -619,7 +620,7 @@ void MainWindow::on_actionExport_as_Component_triggered()
 
 		QFileDialog fd(this);
 		fd.setWindowTitle("Export as Component");
-		fd.setFilter("*.dbcomponent");
+		fd.setNameFilter("*.dbcomponent");
 		fd.setAcceptMode(QFileDialog::AcceptSave);
 		fd.selectFile(options->componentName);
 		if(fd.exec() && fd.selectedFiles().size() == 1)

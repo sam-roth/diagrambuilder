@@ -1,38 +1,44 @@
 
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.16)
 project(DiagramBuilder2)
 set(CMAKE_CXX_FLAGS "-g -O0 -Wall -Wno-sign-compare --std=gnu++0x")
 # hack to fix -DQT_NO_DEBUG being injected into an unknown variable 
 set(PCH_ADDL_FLAGS "-DQT_NO_DEBUG") 
 include(User.cmake OPTIONAL)
-set(CMAKE_AUTOMOC TRUE)
-
-set(QT_USE_QTSVG TRUE)
-set(QT_USE_QTOPENGL TRUE)
-set(QT_USE_QTXML TRUE)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
 find_package(Boost COMPONENTS system date_time)
-find_package(Qt4   REQUIRED)
+find_package(Qt5 COMPONENTS Widgets Svg OpenGL Xml PrintSupport REQUIRED)
 add_definitions(
     ${QT_DEFINITIONS}
     -DQT_STATICPLUGIN
 )
-include(${QT_USE_FILE})
+
+#list(FILTER Qt5Widgets_INCLUDE_DIRS EXCLUDE REGEX .framework$)
+
+message(STATUS "headers" ${more_qt_headers})
 
 include_directories(
-	${Boost_INCLUDE_DIR}
+	SYSTEM
+	${Boost_INCLUDE_DIRS}
 )
 
 include_directories(
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_BINARY_DIR}
 )
-include("${CMAKE_SOURCE_DIR}/PrecompiledHeader.cmake")
 
-QT4_ADD_RESOURCES(RESOURCE_OUTPUT resources.qrc)
-QT4_WRAP_UI(UI_OUTPUT MainWindowUI.ui Preferences.ui BasicPropertyWidget.ui ExportComponentOptions.ui)
+#include("${CMAKE_SOURCE_DIR}/PrecompiledHeader.cmake")
 
 add_executable(
 	DiagramBuilder2 MACOSX_BUNDLE
+
+	resources.qrc
+	BasicPropertyWidget.ui
+	Main/ExportComponentOptions.ui
+	Main/MainWindowUI.ui
+	Main/Preferences.ui
 
 	DiagramItem.cpp
 	DiagramComponent.cpp
@@ -102,8 +108,10 @@ add_executable(
 )
 
 
-add_precompiled_header(DiagramBuilder2 Prefix.hpp) 
-message(WARNING ${RESOURCE_OUTPUT})
+#add_precompiled_header(DiagramBuilder2 Prefix.hpp) 
+
+target_precompile_headers(DiagramBuilder2 PRIVATE Prefix.hpp)
+#message(WARNING ${RESOURCE_OUTPUT})
 
 set_target_properties(
 	DiagramBuilder2 PROPERTIES
@@ -121,7 +129,11 @@ endif()
 target_link_libraries(
 	DiagramBuilder2
 	${Boost_LIBRARIES}
-	${QT_LIBRARIES}
+	Qt5::Widgets
+	Qt5::Svg
+	Qt5::OpenGL
+	Qt5::Xml
+	Qt5::PrintSupport
 	${ADDL_LIBS}
 )
 

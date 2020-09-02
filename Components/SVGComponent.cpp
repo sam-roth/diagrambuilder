@@ -53,7 +53,7 @@ SVGComponent::SVGComponent(QString kindName, QString filename, QList<QPointF> po
 , _ports(ports)
 {
 	auto document = makeFixedWidthStroke(this->filename());
-	QSvgRenderer renderer(document.toAscii());
+	QSvgRenderer renderer(document.toLatin1());
 	_icon = iconFromSVG(renderer);
 	_sharedRenderer = new QSvgRenderer(_filename, this);
 }
@@ -67,7 +67,7 @@ SVGComponent::SVGComponent(QString kindName,
 , _svgData(svgData.data)
 {
 	auto document = makeFixedWidthStrokeWithData(_svgData);
-	QSvgRenderer renderer(document.toAscii());
+	QSvgRenderer renderer(document.toLatin1());
 	_icon = iconFromSVG(renderer);
 	_sharedRenderer = new QSvgRenderer(_svgData.toUtf8(), this);
 }

@@ -16,6 +16,7 @@ TabFocusableTextItem::TabFocusableTextItem(QGraphicsItem* parentItem)
 : QGraphicsTextItem(parentItem)
 , _focusRing(nullptr)
 {
+	this->setDefaultTextColor(QColor(0, 0, 0));
 }
 
 TabFocusable* TabFocusableTextItem::nextFocusable()

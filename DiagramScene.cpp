@@ -32,11 +32,27 @@
 #include "Commands/InsertItemsCommand.hpp"
 #include <QApplication>
 #include <QCloseEvent>
+#include <QStyle>
 #include "TabFocus/TabFocusable.hpp"
 #include "TabFocus/TabFocusRing.hpp"
 
 namespace dbuilder {
 
+
+static QList<DiagramItem *> duplicateItems(const QList<DiagramItem *> &items, QObject *parent)
+{
+	QList<DiagramItem *> result;
+	UUIDMapper mapper;
+	for(auto item : items)
+	{
+		auto m = item->model()->clone(&mapper, parent);
+		auto i = m->kind()->createFromModel(m);
+		i->setParent(parent);
+		result << i;
+	}
+
+	return result;
+}
 
 
 DiagramScene::DiagramScene(DiagramContext *context, QObject* parent)
@@ -54,7 +70,6 @@ DiagramScene::DiagramScene(DiagramContext *context, QObject* parent)
 , _zoomRectangle(nullptr)
 , _dragLock(false)
 {
-
 }
 
 void DiagramScene::setHighlightedItem(DiagramItem *item, int port)
@@ -85,6 +100,8 @@ void DiagramScene::drawBackground(QPainter * painter, const QRectF &rect)
 {
 	if(!printMode())
 	{
+		painter->setBackground(QColor(255, 255, 255));
+		painter->eraseRect(rect);
 		qreal gridInterval = 5;
 		painter->setPen(QColor(230, 230, 255));
 		for(qreal x = round(rect.left() / gridInterval) * gridInterval; x < rect.right(); x += gridInterval)
@@ -263,6 +280,26 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 
 	this->setCursorPos(event->scenePos());
+
+
+	if(event->modifiers().testFlag(Qt::ControlModifier))
+	{
+		auto items = filterCast<DiagramItem>(this->items(event->scenePos()));
+		if(!items.empty())
+		{
+			auto item = items.front();
+			auto dup = duplicateItems({item}, this);
+			auto dupItem = dup.front();
+			this->undoStack().push(new dbuilder::InsertItemsCommand(this, {dup}, nullptr));
+
+			item->setSelected(false);
+			dupItem->setSelected(true);
+			this->send({dupItem}, ToFront);
+
+			this->setFocusItem(dupItem, Qt::OtherFocusReason);
+		}
+	}
+
 	QGraphicsScene::mousePressEvent(event);
 
 	for(auto item : this->selectedItems())
@@ -438,21 +475,6 @@ void DiagramScene::addDiagramItemsInOrder(const QList<DiagramItem*>& items)
 }
 
 
-static QList<DiagramItem *> duplicateItems(const QList<DiagramItem *> &items, QObject *parent)
-{
-	QList<DiagramItem *> result;
-	UUIDMapper mapper;
-	for(auto item : items)
-	{
-		auto m = item->model()->clone(&mapper, parent);
-		auto i = m->kind()->createFromModel(m);
-		i->setParent(parent);
-		result << i;
-	}
-
-	return result;
-}
-
 
 void DiagramScene::replicateAndConnect(Connection conn)
 {
@@ -608,7 +630,7 @@ void DiagramScene::send(const QList<DiagramItem *> &items,
 	QRectF boundingRect;
 	for(auto item : items)
 	{
-		boundingRect.unite(item->boundingRect());
+		boundingRect = boundingRect.united(item->boundingRect());
 	}
 
 	auto otherItems = motion & ZMFully?

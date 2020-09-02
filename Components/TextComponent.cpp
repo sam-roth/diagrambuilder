@@ -265,7 +265,7 @@ QList<DiagramComponent *> TextComponentPlugin::createComponents(QObject *parent)
 
 } // namespace dbuilder
 
-Q_EXPORT_PLUGIN2(dbuilder_TextComponentPlugin,
-                 dbuilder::TextComponentPlugin)
+// Q_EXPORT_PLUGIN2(dbuilder_TextComponentPlugin,
+//                  dbuilder::TextComponentPlugin)
 
 #include "TextComponent.moc"

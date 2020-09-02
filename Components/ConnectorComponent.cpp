@@ -907,7 +907,7 @@ void ConnectorComponent::configure(DiagramItem *item) const
 
 	item->setFlag(QGraphicsItem::ItemIsSelectable);
 	item->setAcceptedMouseButtons(Qt::NoButton);
-	item->setAcceptsHoverEvents(false);
+	item->setAcceptHoverEvents(false);
 	item->setZValue(100);
 	item->setBoundingRegionGranularity(0.25);
 	item->setItemSnaps(false);

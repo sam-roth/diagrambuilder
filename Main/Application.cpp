@@ -24,8 +24,8 @@
 #include "Util/QtUtil.hpp"
 #include "Util/Backtrace.hpp"
 
-Q_IMPORT_PLUGIN(dbuilder_TextComponentPlugin)
-Q_IMPORT_PLUGIN(dbuilder_ImageComponentPlugin)
+// Q_IMPORT_PLUGIN(dbuilder_TextComponentPlugin)
+// Q_IMPORT_PLUGIN(dbuilder_ImageComponentPlugin)
 
 namespace dbuilder {
 
@@ -36,7 +36,6 @@ Application::Application()
 {
 	_instance = this;
 	readSettings();
-
 
 	QStringList candidatePlugins;
 	auto addCandidates = [&](const QDir &d) {
@@ -49,7 +48,7 @@ Application::Application()
 		}
 	};
 
-	auto userAppDir = QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation));
+	auto userAppDir = QDir(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
 	DBDebug(DBDump(userAppDir.path()));
 	addCandidates(userAppDir);
 
@@ -170,7 +169,7 @@ void Application::run()
 {
 	auto mw = addMainWindow();
 
-	if(qApp->argc() > 1)
+	if(qApp->arguments().size() > 1)
 	{
 		auto args = qApp->arguments();
 		for(int i = 1; i < args.size(); ++i)
@@ -227,8 +226,10 @@ static void signalHandler(int)
 	sroth::terminateHandler();
 }
 
-static void msgHandler(QtMsgType ty, const char *msg)
+static void msgHandler(QtMsgType ty, const QMessageLogContext &, const QString &msgQs)
 {
+	auto msg = msgQs.toStdString();
+
 	namespace log = dbuilder::log;
 	switch (ty)
 	{
@@ -250,7 +251,7 @@ static void msgHandler(QtMsgType ty, const char *msg)
 
 int main(int argc, char **argv)
 {
-	qInstallMsgHandler(&msgHandler);
+	qInstallMessageHandler(&msgHandler);
 	std::set_terminate(&sroth::terminateHandler);
 	for(auto sig : {SIGSEGV, SIGBUS, SIGILL, SIGABRT})
 		signal(sig, &signalHandler);

@@ -24,7 +24,6 @@ static const char *ImageSourceKey = "image.source";
 class ImageGraphicsItem: public QObject, public QGraphicsRectItem
 {
 	Q_OBJECT
-	Q_INTERFACES(QGraphicsItem)
 	friend class ImagePropertyWidget;
 	DiagramItem *_item;
 	QGraphicsSvgItem *_svgItem;
@@ -329,7 +328,7 @@ QList<DiagramComponent *> ImageComponentPlugin::createComponents(QObject *parent
 
 } /* namespace dbuilder */
 
-Q_EXPORT_PLUGIN2(dbuilder_ImageComponentPlugin,
-                 dbuilder::ImageComponentPlugin)
+// Q_EXPORT_PLUGIN2(dbuilder_ImageComponentPlugin,
+//                  dbuilder::ImageComponentPlugin)
 
 #include "ImageComponent.moc"
